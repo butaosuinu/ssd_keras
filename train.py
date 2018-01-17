@@ -195,11 +195,10 @@ class Generator(object):
                         img, y = self.horizontal_flip(img, y)
                     if self.vflip_prob > 0:
                         img, y = self.vertical_flip(img, y)
-                # 訓練データ生成時にbbox_utilを使っているのはここだけらしい
                 #print(y)
                 y = self.bbox_util.assign_boxes(y)
                 #print(y)
-                inputs.append(img)                
+                inputs.append(img)
                 targets.append(y)
                 if len(targets) == self.batch_size:
                     tmp_inp = np.array(inputs)
@@ -219,7 +218,6 @@ model.load_weights('weights_SSD300.hdf5', by_name=True)
 freeze = ['input_1', 'conv1_1', 'conv1_2', 'pool1',
           'conv2_1', 'conv2_2', 'pool2',
           'conv3_1', 'conv3_2', 'conv3_3', 'pool3']#,
-#           'conv4_1', 'conv4_2', 'conv4_3', 'pool4']
 
 for L in model.layers:
     if L.name in freeze:
@@ -239,7 +237,6 @@ model.compile(optimizer=optim,
               loss=MultiboxLoss(NUM_CLASSES, neg_pos_ratio=2.0).compute_loss)
 
 nb_epoch = 50
-# nb_epoch = 100
 history = model.fit_generator(gen.generate(True), gen.train_batches,
                               nb_epoch, verbose=1,
                               callbacks=callbacks,
@@ -258,6 +255,18 @@ inputs = preprocess_input(np.array(inputs))
 
 preds = model.predict(inputs, batch_size=1, verbose=1)
 results = bbox_util.detection_out(preds)
+
+def plot_history(history):
+    # 損失の履歴をプロット
+    plt.plot(history.history['loss'],"o-",label="loss",)
+    plt.plot(history.history['val_loss'],"o-",label="val_loss")
+    plt.title('model loss')
+    plt.xlabel('epoch')
+    plt.ylabel('loss')
+    plt.legend(loc='lower right')
+    plt.show()
+# modelに学習させた時の変化の様子をplot
+plot_history(history)
 
 for i, img in enumerate(images):
     # Parse the outputs.
