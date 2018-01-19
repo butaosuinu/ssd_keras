@@ -38,6 +38,7 @@ class XML_preprocessor(object):
             self.data[image_name] = image_data
 
     def _to_one_hot(self,name):
+        # バウンディングボックスの定義ファイルの都合でクラス数を20としなければならないためダミーのクラスを含む
         one_hot_vector = [0] * self.num_classes
         if name == 'title':
             one_hot_vector[0] = 1
