@@ -9,8 +9,9 @@ import tensorflow as tf
 from keras import backend as K
 import math
 import time
+import glob
 
-from ssd_v2 import SSD300v2
+from ssd import SSD300
 from ssd_utils import BBoxUtility
 
 config = tf.ConfigProto(
@@ -29,8 +30,8 @@ NUM_CLASSES = len(voc_classes) + 1
 
 network_size = 300
 input_shape=(network_size, network_size, 3)
-model = SSD300v2(input_shape, num_classes=NUM_CLASSES)
-model.load_weights('weights.50-4.46.hdf5', by_name=True)
+model = SSD300(input_shape, num_classes=NUM_CLASSES)
+model.load_weights('weights.50-firstTime.hdf5', by_name=True)
 bbox_util = BBoxUtility(NUM_CLASSES)
 
 inputs = []
@@ -43,8 +44,9 @@ def get_image_from_path(img_path):
     images.append(imread(img_path))
     inputs.append(img.copy())
 
-for idx in range(1292, 1293):
-    get_image_from_path('./test_pic/' + str(idx) + '.jpg')
+img_list = glob.glob('test_img/*.jpg')
+for ig in img_list:
+    get_image_from_path(ig)
 
 inputs = preprocess_input(np.array(inputs))
 t1 = time.time()
