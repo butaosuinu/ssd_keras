@@ -103,8 +103,104 @@ f_ans_bb = open(ans_path, 'r')
 sub = json.load(f_sub_bb)
 ans = json.load(f_ans_bb)
 
+sub_h = []
+for s_h in sub:
+  if float(s_h[2]) > 0.5:
+    print(s_h)
+    sub_h.append(s_h)
+
+ans_t = []
+sub_t = []
+for a in ans:
+  if 'title' == a[1]:
+    ans_t.append(a)
+
+for s in sub:
+  if 'Title' == s[1]:
+    sub_t.append(s)
+
+ans_st = []
+sub_st = []
+for a in ans:
+  if 'sub_title' == a[1]:
+    ans_st.append(a)
+
+for s in sub:
+  if 'Sub_title' == s[1]:
+    sub_st.append(s)
+
+ans_at = []
+sub_at = []
+for a in ans:
+  if 'author' == a[1]:
+    ans_at.append(a)
+
+for s in sub:
+  if 'Author' == s[1]:
+    sub_at.append(s)
+
+ans_n = []
+sub_n = []
+for a in ans:
+  if 'num' == a[1]:
+    ans_n.append(a)
+
+for s in sub:
+  if 'Num' == s[1]:
+    sub_n.append(s)
+
+ans_sn = []
+sub_sn = []
+for a in ans:
+  if 'series_name' == a[1]:
+    ans_sn.append(a)
+
+for s in sub:
+  if 'Series_name' == s[1]:
+    sub_sn.append(s)
 
 score = compute_map(sub, ans, 0.6)
 score9 = compute_map(sub, ans, 0.9)
+scoreh = compute_map(sub_h, ans, 0.6)
+scoreh9 = compute_map(sub_h, ans, 0.9)
+
+scoreT = compute_map(sub_t, ans_t, 0.6)
+scoreT9 = compute_map(sub_t, ans_t, 0.9)
+
+scoreST = compute_map(sub_st, ans_st, 0.6)
+scoreST9 = compute_map(sub_st, ans_st, 0.9)
+
+scoreAT = compute_map(sub_at, ans_at, 0.6)
+scoreAT9 = compute_map(sub_at, ans_at, 0.9)
+
+scoreN = compute_map(sub_n, ans_n, 0.6)
+scoreN9 = compute_map(sub_n, ans_n, 0.9)
+
+scoreSN = compute_map(sub_sn, ans_sn, 0.6)
+scoreSN9 = compute_map(sub_sn, ans_sn, 0.9)
+
+print('信頼性すべて、範囲重なり具合0.6以上')
 print(score)
+print('信頼性すべて、範囲重なり具合0.9以上')
 print(score9)
+
+print('信頼性0.5以上、範囲重なり具合0.6以上')
+print(scoreh)
+print('信頼性0.5以上、範囲重なり具合0.9以上')
+print(scoreh9)
+
+print('title')
+print(scoreT)
+print(scoreT9)
+print('sub_title')
+print(scoreST)
+print(scoreST9)
+print('author')
+print(scoreAT)
+print(scoreAT9)
+print('num')
+print(scoreN)
+print(scoreN9)
+print('series_name')
+print(scoreSN)
+print(scoreSN9)
